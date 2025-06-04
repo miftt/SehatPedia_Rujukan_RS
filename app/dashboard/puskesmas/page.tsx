@@ -23,73 +23,44 @@ import {
   Phone,
 } from "lucide-react"
 import { ReferralForm } from "../../components/ReferralForm"
-
-interface Hospital {
-  id: string
-  name: string
-  specialty: string
-  distance: string
-  available: boolean
-}
-
-interface Referral {
-  id: string
-  patientName: string
-  condition: string
-  hospital: string
-  status: string
-  date: string
-  urgency: string
-}
-
-interface DashboardStats {
-  todayReferrals: {
-    count: number
-    change: number
-    changeText: string
-  }
-  pendingConfirmation: {
-    count: number
-    averageTime: string
-    changeText: string
-  }
-  acceptedReferrals: {
-    count: number
-    rate: string
-    changeText: string
-  }
-  activePatients: {
-    count: number
-    newPatients: number
-    changeText: string
-  }
-}
+import { Hospital, Referral, DashboardStats } from "@/app/types"
+import { getHospitals, getReferrals, getDashboardStats } from "@/app/lib/api"
+import { NotificationDropdown } from "@/app/components/NotificationDropdown"
+import { ReferralModal } from "@/app/components/ReferralModal"
+import { ReferralDetail } from "@/app/components/ReferralDetail"
 
 export default function PuskesmasDashboard() {
   const [searchTerm, setSearchTerm] = useState("")
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [referrals, setReferrals] = useState<Referral[]>([])
   const [hospitals, setHospitals] = useState<Hospital[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDetailOpen, setIsDetailOpen] = useState(false)
+  const [selectedReferral, setSelectedReferral] = useState<Referral | null>(null)
+
+  const fetchData = async () => {
+    try {
+      const [statsData, referralsData, hospitalsData] = await Promise.all([
+        getDashboardStats(),
+        getReferrals(),
+        getHospitals()
+      ])
+      setStats(statsData)
+      setReferrals(referralsData)
+      setHospitals(hospitalsData)
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error)
+    }
+  }
 
   useEffect(() => {
-    // Fetch dashboard stats
-    fetch("/api/stats")
-      .then((res) => res.json())
-      .then((data) => setStats(data))
-      .catch((error) => console.error("Error fetching stats:", error))
-
-    // Fetch referrals
-    fetch("/api/referrals")
-      .then((res) => res.json())
-      .then((data) => setReferrals(data))
-      .catch((error) => console.error("Error fetching referrals:", error))
-
-    // Fetch hospitals
-    fetch("/api/hospitals")
-      .then((res) => res.json())
-      .then((data) => setHospitals(data))
-      .catch((error) => console.error("Error fetching hospitals:", error))
+    fetchData()
   }, [])
+
+  const handleReferralSuccess = () => {
+    // Refresh data after successful referral creation
+    fetchData()
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -137,6 +108,11 @@ export default function PuskesmasDashboard() {
     }
   }
 
+  const handleDetailClick = (referral: Referral) => {
+    setSelectedReferral(referral)
+    setIsDetailOpen(true)
+  }
+
   if (!stats) {
     return <div>Loading...</div>
   }
@@ -152,13 +128,11 @@ export default function PuskesmasDashboard() {
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">SehatPedia</h1>
-              <p className="text-xs text-gray-600">Puskesmas Kebon Jeruk</p>
+              <p className="text-xs text-gray-600">Puskesmas Setiabudi</p>
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <Bell className="w-4 h-4" />
-            </Button>
+            <NotificationDropdown />
             <Button variant="ghost" size="sm">
               <Settings className="w-4 h-4" />
             </Button>
@@ -300,7 +274,7 @@ export default function PuskesmasDashboard() {
                             {referral.date}
                           </div>
                         </div>
-                        <Button variant="outline" size="sm">
+                        <Button variant="outline" size="sm" onClick={() => handleDetailClick(referral)}>
                           Detail
                         </Button>
                       </div>
@@ -376,6 +350,20 @@ export default function PuskesmasDashboard() {
           </TabsContent>
         </Tabs>
       </div>
+
+      <ReferralModal 
+        open={isModalOpen} 
+        onOpenChange={setIsModalOpen} 
+        onSuccess={handleReferralSuccess}
+      />
+      
+      {selectedReferral && (
+        <ReferralDetail
+          open={isDetailOpen}
+          onOpenChange={setIsDetailOpen}
+          referral={selectedReferral}
+        />
+      )}
     </div>
   )
 }

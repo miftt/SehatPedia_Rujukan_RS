@@ -29,7 +29,7 @@ export default function PasienDashboard() {
     {
       id: "REF001",
       condition: "Hipertensi Berat",
-      fromPuskesmas: "Puskesmas Kebon Jeruk",
+      fromPuskesmas: "Puskesmas Setiabudi",
       toHospital: "RSUD Dr. Soetomo",
       status: "completed",
       date: "2025-01-10",
@@ -39,7 +39,7 @@ export default function PasienDashboard() {
     {
       id: "REF002",
       condition: "Kontrol Diabetes",
-      fromPuskesmas: "Puskesmas Kebon Jeruk",
+      fromPuskesmas: "Puskesmas Setiabudi",
       toHospital: "RS Airlangga",
       status: "in-progress",
       date: "2025-01-15",
@@ -447,7 +447,7 @@ export default function PasienDashboard() {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-gray-700">Faskes Tingkat I</label>
-                    <p className="text-gray-900">Puskesmas Kebon Jeruk</p>
+                    <p className="text-gray-900">Puskesmas Setiabudi</p>
                   </div>
                   <Button variant="outline">Update BPJS</Button>
                 </CardContent>

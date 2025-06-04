@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -15,9 +15,17 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useRouter } from "next/navigation"
+import { Hospital } from "@/app/types"
+import { getHospitals, createReferral } from "@/app/lib/api"
+import { toast } from "sonner"
 
-export function ReferralForm() {
+interface ReferralFormProps {
+  onSubmit?: (values: any) => Promise<void>
+}
+
+export function ReferralForm({ onSubmit }: ReferralFormProps) {
   const [isLoading, setIsLoading] = useState(false)
+  const [hospitals, setHospitals] = useState<Hospital[]>([])
   const [formData, setFormData] = useState({
     patientName: "",
     nik: "",
@@ -37,6 +45,19 @@ export function ReferralForm() {
   })
   const router = useRouter()
 
+  useEffect(() => {
+    const fetchHospitals = async () => {
+      try {
+        const hospitalData = await getHospitals()
+        setHospitals(hospitalData)
+      } catch (error) {
+        console.error("Error fetching hospitals:", error)
+        toast.error("Gagal memuat data rumah sakit")
+      }
+    }
+    fetchHospitals()
+  }, [])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target
     setFormData(prev => ({ ...prev, [id]: value }))
@@ -51,21 +72,30 @@ export function ReferralForm() {
     setIsLoading(true)
     
     try {
-      const response = await fetch("/api/referrals", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to create referral")
+      const selectedHospital = hospitals.find(h => h.id === formData.targetHospital)
+      if (!selectedHospital) {
+        toast.error("Rumah sakit tidak ditemukan")
+        return
       }
 
-      // Refresh the page data
-      router.refresh()
+      const referralData = {
+        patientName: formData.patientName,
+        condition: formData.diagnosis,
+        hospital: selectedHospital.name,
+        urgency: formData.referralType as "low" | "medium" | "high",
+      }
+
+      if (onSubmit) {
+        await onSubmit(referralData)
+      } else {
+        await createReferral(referralData)
+        router.refresh()
+      }
       
+      toast.success("Rujukan berhasil dibuat!", {
+        description: `Pasien: ${formData.patientName}`
+      })
+
       // Reset form
       setFormData({
         patientName: "",
@@ -86,7 +116,9 @@ export function ReferralForm() {
       })
     } catch (error) {
       console.error("Error creating referral:", error)
-      // Here you would typically show an error message to the user
+      toast.error("Gagal membuat rujukan", {
+        description: "Silakan coba lagi nanti"
+      })
     } finally {
       setIsLoading(false)
     }
@@ -267,9 +299,12 @@ export function ReferralForm() {
                     <SelectValue placeholder="Pilih rumah sakit" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="rs1">RS Umum Daerah</SelectItem>
-                    <SelectItem value="rs2">RS Bhayangkara</SelectItem>
-                    <SelectItem value="rs3">RS TNI</SelectItem>
+                    {hospitals.map((hospital) => (
+                      <SelectItem key={hospital.id} value={hospital.id}>
+                        {hospital.name} - {hospital.specialty}
+                        {!hospital.available && " (Tidak Tersedia)"}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

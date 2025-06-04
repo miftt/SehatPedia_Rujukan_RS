@@ -9,22 +9,44 @@ import {
 } from "@/components/ui/dialog"
 import { ReferralForm } from "./ReferralForm"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 interface ReferralModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onSuccess?: () => void
 }
 
-export function ReferralModal({ open, onOpenChange }: ReferralModalProps) {
+export function ReferralModal({ open, onOpenChange, onSuccess }: ReferralModalProps) {
+  const router = useRouter()
+
   const handleSubmit = async (values: any) => {
-    // Here you would typically send the data to your backend
-    console.log("Form submitted:", values)
-    
-    // Show success message
-    toast.success("Rujukan berhasil dibuat!")
-    
-    // Close the modal
-    onOpenChange(false)
+    try {
+      // Here you would typically send the data to your backend
+      console.log("Form submitted:", values)
+      
+      // Close the modal
+      onOpenChange(false)
+      
+      // Show success message
+      toast.success("Rujukan berhasil dibuat!")
+      
+      // Call onSuccess callback if provided
+      if (onSuccess) {
+        onSuccess()
+      }
+      
+      // Force a refresh of the page data
+      router.refresh()
+      
+      // Force a hard refresh after a short delay to ensure data is updated
+      setTimeout(() => {
+        window.location.reload()
+      }, 100)
+    } catch (error) {
+      console.error("Error submitting referral:", error)
+      toast.error("Gagal membuat rujukan. Silakan coba lagi.")
+    }
   }
 
   return (
