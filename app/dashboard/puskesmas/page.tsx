@@ -119,164 +119,190 @@ export default function PuskesmasDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
-              <Heart className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">SehatPedia</h1>
-              <p className="text-xs text-gray-600">Puskesmas Setiabudi</p>
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <NotificationDropdown />
-            <Button variant="ghost" size="sm">
-              <Settings className="w-4 h-4" />
-            </Button>
+      {/* Header - Made more compact on mobile */}
+      <header className="bg-white border-b sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-3 md:py-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-blue-600" />
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
+                <Heart className="w-4 h-4 md:w-6 md:h-6 text-white" />
               </div>
-              <div className="text-sm">
-                <p className="font-medium">Dr. Sarah Amelia</p>
-                <p className="text-gray-500">Dokter Umum</p>
+              <div>
+                <h1 className="text-lg md:text-xl font-bold text-gray-900">SehatPedia</h1>
+                <p className="text-xs text-gray-600">Puskesmas Setiabudi</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2 md:space-x-4 w-full sm:w-auto justify-end">
+              <NotificationDropdown />
+              <Button variant="ghost" size="sm" className="hidden md:flex">
+                <Settings className="w-4 h-4" />
+              </Button>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-blue-600" />
+                </div>
+                <div className="hidden sm:block text-sm">
+                  <p className="font-medium">Dr. Sarah Amelia</p>
+                  <p className="text-gray-500 text-xs">Dokter Umum</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Puskesmas</h1>
-          <p className="text-gray-600">Kelola rujukan pasien dan koordinasi dengan rumah sakit</p>
+      <div className="container mx-auto px-4 py-4 md:py-8">
+        {/* Welcome Section - Responsive text sizes */}
+        <div className="mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1 md:mb-2">Dashboard Puskesmas</h1>
+          <p className="text-sm md:text-base text-gray-600">Kelola rujukan pasien dan koordinasi dengan rumah sakit</p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Rujukan Hari Ini</CardTitle>
-              <FileText className="h-4 w-4 text-muted-foreground" />
+        {/* Stats Cards - Responsive grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+          <Card className="p-3 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 mb-2">
+              <CardTitle className="text-xs md:text-sm font-medium">Rujukan Hari Ini</CardTitle>
+              <FileText className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.todayReferrals.count}</div>
-              <p className="text-xs text-muted-foreground">{stats.todayReferrals.changeText}</p>
+            <CardContent className="p-0">
+              <div className="text-lg md:text-2xl font-bold">{stats.todayReferrals.count}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">{stats.todayReferrals.changeText}</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Menunggu Konfirmasi</CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground" />
+          <Card className="p-3 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 mb-2">
+              <CardTitle className="text-xs md:text-sm font-medium">Menunggu</CardTitle>
+              <Clock className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.pendingConfirmation.count}</div>
-              <p className="text-xs text-muted-foreground">{stats.pendingConfirmation.changeText}</p>
+            <CardContent className="p-0">
+              <div className="text-lg md:text-2xl font-bold">{stats.pendingConfirmation.count}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">{stats.pendingConfirmation.changeText}</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Rujukan Diterima</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          <Card className="p-3 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 mb-2">
+              <CardTitle className="text-xs md:text-sm font-medium">Diterima</CardTitle>
+              <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.acceptedReferrals.count}</div>
-              <p className="text-xs text-muted-foreground">{stats.acceptedReferrals.changeText}</p>
+            <CardContent className="p-0">
+              <div className="text-lg md:text-2xl font-bold">{stats.acceptedReferrals.count}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">{stats.acceptedReferrals.changeText}</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pasien Aktif</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+          <Card className="p-3 md:p-4">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 mb-2">
+              <CardTitle className="text-xs md:text-sm font-medium">Pasien Aktif</CardTitle>
+              <Users className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
             </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.activePatients.count}</div>
-              <p className="text-xs text-muted-foreground">{stats.activePatients.changeText}</p>
+            <CardContent className="p-0">
+              <div className="text-lg md:text-2xl font-bold">{stats.activePatients.count}</div>
+              <p className="text-[10px] md:text-xs text-muted-foreground">{stats.activePatients.changeText}</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Content */}
-        <Tabs defaultValue="rujukan" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="rujukan">Rujukan</TabsTrigger>
-            <TabsTrigger value="pasien">Pasien</TabsTrigger>
-            <TabsTrigger value="rumah-sakit">Rumah Sakit</TabsTrigger>
-            <TabsTrigger value="laporan">Laporan</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="rujukan" className="space-y-4 md:space-y-6">
+          <div className="overflow-x-auto">
+            <TabsList className="inline-flex w-full md:w-auto h-9 md:h-10 items-center justify-start md:justify-center text-muted-foreground rounded-lg p-1">
+              <TabsTrigger value="rujukan" className="text-xs md:text-sm px-2.5 md:px-3">Rujukan</TabsTrigger>
+              <TabsTrigger value="pasien" className="text-xs md:text-sm px-2.5 md:px-3">Pasien</TabsTrigger>
+              <TabsTrigger value="rumah-sakit" className="text-xs md:text-sm px-2.5 md:px-3">Rumah Sakit</TabsTrigger>
+              <TabsTrigger value="laporan" className="text-xs md:text-sm px-2.5 md:px-3">Laporan</TabsTrigger>
+            </TabsList>
+          </div>
 
-          <TabsContent value="rujukan" className="space-y-6">
-            {/* Quick Actions */}
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-              <div className="flex gap-2">
-                <ReferralForm />
-                <Button variant="outline">
-                  <Filter className="w-4 h-4 mr-2" />
+          <TabsContent value="rujukan" className="space-y-4 md:space-y-6">
+            {/* Quick Actions - Responsive layout */}
+            <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-stretch md:items-center justify-between">
+              <div className="flex flex-wrap gap-2 md:gap-3">
+                <Button onClick={() => setIsModalOpen(true)} className="text-xs md:text-sm h-8 md:h-10">
+                  Buat Rujukan
+                </Button>
+                <Button variant="outline" className="text-xs md:text-sm h-8 md:h-10">
+                  <Filter className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                   Filter
                 </Button>
-                <Button variant="outline">
-                  <Download className="w-4 h-4 mr-2" />
+                <Button variant="outline" className="text-xs md:text-sm h-8 md:h-10">
+                  <Download className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                   Export
                 </Button>
               </div>
-              <div className="relative w-full sm:w-auto">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <div className="relative w-full md:w-64">
+                <Search className="absolute left-2 md:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-3 h-3 md:w-4 md:h-4" />
                 <Input
                   placeholder="Cari rujukan..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-full sm:w-64"
+                  className="pl-7 md:pl-9 text-xs md:text-sm h-8 md:h-10"
                 />
               </div>
             </div>
 
-            {/* Referrals List */}
+            {/* Referrals List - Responsive table */}
             <Card>
-              <CardHeader>
-                <CardTitle>Rujukan Terbaru</CardTitle>
-                <CardDescription>Daftar rujukan yang telah dibuat hari ini</CardDescription>
+              <CardHeader className="p-4 md:p-6">
+                <CardTitle className="text-base md:text-lg">Rujukan Terbaru</CardTitle>
+                <CardDescription className="text-xs md:text-sm">Daftar rujukan yang telah dibuat hari ini</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="p-0">
+                <div className="divide-y">
                   {referrals.map((referral) => (
                     <div
                       key={referral.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                      className="p-3 md:p-4 hover:bg-gray-50 transition-colors"
                     >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <User className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-gray-900">{referral.patientName}</h3>
-                          <p className="text-sm text-gray-600">{referral.condition}</p>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <MapPin className="w-3 h-3 text-gray-400" />
-                            <span className="text-xs text-gray-500">{referral.hospital}</span>
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4">
+                        <div className="flex items-start md:items-center gap-3">
+                          <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <User className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-medium text-sm md:text-base text-gray-900 truncate">{referral.patientName}</h3>
+                            <p className="text-xs md:text-sm text-gray-600 truncate">{referral.condition}</p>
+                            <div className="flex items-center mt-1">
+                              <MapPin className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-400 flex-shrink-0" />
+                              <span className="ml-1 text-xs text-gray-500 truncate">{referral.hospital}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <div className="text-right">
-                          <div className="flex items-center space-x-2 mb-1">
-                            {getStatusBadge(referral.status)}
-                            {getUrgencyBadge(referral.urgency)}
+                        <div className="flex items-center justify-between md:justify-end gap-3 md:gap-4">
+                          <div className="flex flex-col items-end gap-1">
+                            <div className="flex flex-wrap gap-1.5">
+                              <Badge 
+                                variant="outline" 
+                                className="text-[10px] md:text-xs px-1.5 py-0 h-5"
+                              >
+                                {referral.status === "pending" ? "Menunggu" : 
+                                 referral.status === "accepted" ? "Diterima" : "Selesai"}
+                              </Badge>
+                              {referral.urgency === "high" && (
+                                <Badge 
+                                  variant="destructive"
+                                  className="text-[10px] md:text-xs px-1.5 py-0 h-5"
+                                >
+                                  Urgent
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="flex items-center text-[10px] md:text-xs text-gray-500">
+                              <Calendar className="w-3 h-3 mr-1 flex-shrink-0" />
+                              {referral.date}
+                            </div>
                           </div>
-                          <div className="flex items-center text-xs text-gray-500">
-                            <Calendar className="w-3 h-3 mr-1" />
-                            {referral.date}
-                          </div>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => handleDetailClick(referral)}
+                            className="text-xs h-7 md:h-8 px-2 md:px-3"
+                          >
+                            Detail
+                          </Button>
                         </div>
-                        <Button variant="outline" size="sm" onClick={() => handleDetailClick(referral)}>
-                          Detail
-                        </Button>
                       </div>
                     </div>
                   ))}
