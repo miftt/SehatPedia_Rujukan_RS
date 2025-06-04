@@ -128,7 +128,7 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            {/* Demo Credentials */}
+            {/* Demo Credentials
             <div className="mt-6 p-4 bg-gray-50 rounded-lg">
               <p className="text-sm font-medium text-gray-700 mb-2">Demo Credentials:</p>
               <div className="text-xs text-gray-600 space-y-1">
@@ -150,7 +150,7 @@ export default function LoginPage() {
                   * Untuk akun selain pasien, silakan hubungi administrator
                 </p>
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 

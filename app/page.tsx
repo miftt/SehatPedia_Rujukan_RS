@@ -36,12 +36,12 @@ export default function HomePage() {
                 Masuk
               </Button>
             </Link>
-            <Link href="/dashboard">
+            <Link href="/register">
               <Button
                 size="sm"
                 className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
               >
-                Dashboard
+                Register
               </Button>
             </Link>
           </div>

@@ -75,7 +75,7 @@ export default function DashboardPage() {
             </Card>
           </Link>
 
-          <Link href="/dashboard/rumah-sakit">
+          {/* <Link href="/dashboard/rumah-sakit">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-green-500">
               <CardHeader>
                 <div className="flex items-center space-x-3">
@@ -98,7 +98,7 @@ export default function DashboardPage() {
                 </div>
               </CardContent>
             </Card>
-          </Link>
+          </Link> */}
 
           <Link href="/dashboard/pasien">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-purple-500">
@@ -125,7 +125,7 @@ export default function DashboardPage() {
             </Card>
           </Link>
 
-          <Link href="/dashboard/dinkes">
+          {/* <Link href="/dashboard/dinkes">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-orange-500">
               <CardHeader>
                 <div className="flex items-center space-x-3">
@@ -149,6 +149,7 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
           </Link>
+        </div> */}
         </div>
 
         {/* System Overview */}
