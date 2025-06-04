@@ -124,7 +124,7 @@ export default function LoginPage() {
             <div className="mt-6 text-center text-sm text-gray-600">
               Belum punya akun?{" "}
               <Link href="/register" className="text-blue-600 hover:underline font-medium">
-                Daftar sekarang
+                Daftar sebagai Pasien
               </Link>
             </div>
 
@@ -136,15 +136,18 @@ export default function LoginPage() {
                   <strong>Email Gmail:</strong>
                 </p>
                 <ul className="list-disc pl-5 space-y-1">
-                  <li>dokter.puskesmas.demo@gmail.com (Dokter Puskesmas)</li>
-                  <li>admin.puskesmas.demo@gmail.com (Admin Puskesmas)</li>
-                  <li>dokter.rs.demo@gmail.com (Dokter Rumah Sakit)</li>
-                  <li>admin.rs.demo@gmail.com (Admin Rumah Sakit)</li>
                   <li>pasien.demo@gmail.com (Pasien)</li>
-                  <li>admin.dinkes.demo@gmail.com (Admin Dinas Kesehatan)</li>
+                  <li className="text-gray-400">dokter.puskesmas.demo@gmail.com (Dokter Puskesmas)</li>
+                  <li className="text-gray-400">admin.puskesmas.demo@gmail.com (Admin Puskesmas)</li>
+                  <li className="text-gray-400">dokter.rs.demo@gmail.com (Dokter Rumah Sakit)</li>
+                  <li className="text-gray-400">admin.rs.demo@gmail.com (Admin Rumah Sakit)</li>
+                  <li className="text-gray-400">admin.dinkes.demo@gmail.com (Admin Dinas Kesehatan)</li>
                 </ul>
                 <p className="mt-2">
                   <strong>Password:</strong> demo123
+                </p>
+                <p className="mt-2 text-gray-500 italic">
+                  * Untuk akun selain pasien, silakan hubungi administrator
                 </p>
               </div>
             </div>
