@@ -65,7 +65,7 @@ export default function HomePage() {
             efisiensi proses rujukan dan kualitas layanan kesehatan.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/dashboard">
+            <Link href="/register">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 px-8"
@@ -195,16 +195,16 @@ export default function HomePage() {
             Bergabunglah dengan ratusan fasilitas kesehatan yang telah merasakan manfaat SehatPedia
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/dashboard">
+            <Link href="/register">
               <Button size="lg" variant="secondary" className="px-8">
                 Mulai Gratis
               </Button>
             </Link>
-            <Link href="/contact">
+            <Link href="/">
               <Button
                 size="lg"
                 variant="outline"
-                className="px-8 text-white border-white hover:bg-white hover:text-blue-600"
+                className="px-8 text-black border-white hover:bg-white hover:text-blue-600"
               >
                 Hubungi Kami
               </Button>
