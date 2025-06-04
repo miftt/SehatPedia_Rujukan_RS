@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,6 +8,18 @@ import { Label } from "@/components/ui/label"
 import { Heart, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
+
+const AUTHORIZED_ACCOUNTS = [
+  {
+    email: "pasien.demo@gmail.com",
+    redirect: "/dashboard/pasien"
+  },
+  {
+    email: "dokter.puskesmas.demo@gmail.com",
+    redirect: "/dashboard/puskesmas"
+  }
+]
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -19,28 +29,30 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate login - in real app, this would validate credentials
-    if (email && password) {
-      // Get username part from email (before @gmail.com)
-      const username = email.split('@')[0]
-      
-      // Redirect based on email prefix
-      if (username.startsWith('dokter.puskesmas')) {
-        router.push("/dashboard/puskesmas")
-      } else if (username.startsWith('admin.puskesmas')) {
-        router.push("/dashboard/puskesmas")
-      } else if (username.startsWith('dokter.rs')) {
-        router.push("/dashboard/rumah-sakit")
-      } else if (username.startsWith('admin.rs')) {
-        router.push("/dashboard/rumah-sakit")
-      } else if (username.startsWith('pasien')) {
-        router.push("/dashboard/pasien")
-      } else if (username.startsWith('admin.dinkes')) {
-        router.push("/dashboard/dinkes")
-      } else {
-        router.push("/dashboard")
-      }
+
+    // Basic validation
+    if (!email || !password) {
+      toast.error("Mohon isi email dan password!")
+      return
     }
+
+    // Check if it's an authorized account
+    const account = AUTHORIZED_ACCOUNTS.find(acc => acc.email === email)
+    
+    if (!account) {
+      toast.error("Email atau password salah!")
+      return
+    }
+
+    // Check password (in real app, this would be done on the server)
+    if (password !== "demo123") {
+      toast.error("Password salah!")
+      return
+    }
+
+    // Login successful
+    toast.success("Login berhasil!")
+    router.push(account.redirect)
   }
 
   return (
@@ -113,10 +125,7 @@ export default function LoginPage() {
                 </Link>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
-              >
+              <Button type="submit" className="w-full">
                 Masuk
               </Button>
             </form>
@@ -128,29 +137,11 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            {/* Demo Credentials
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm font-medium text-gray-700 mb-2">Demo Credentials:</p>
-              <div className="text-xs text-gray-600 space-y-1">
-                <p>
-                  <strong>Email Gmail:</strong>
-                </p>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>pasien.demo@gmail.com (Pasien)</li>
-                  <li className="text-gray-400">dokter.puskesmas.demo@gmail.com (Dokter Puskesmas)</li>
-                  <li className="text-gray-400">admin.puskesmas.demo@gmail.com (Admin Puskesmas)</li>
-                  <li className="text-gray-400">dokter.rs.demo@gmail.com (Dokter Rumah Sakit)</li>
-                  <li className="text-gray-400">admin.rs.demo@gmail.com (Admin Rumah Sakit)</li>
-                  <li className="text-gray-400">admin.dinkes.demo@gmail.com (Admin Dinas Kesehatan)</li>
-                </ul>
-                <p className="mt-2">
-                  <strong>Password:</strong> demo123
-                </p>
-                <p className="mt-2 text-gray-500 italic">
-                  * Untuk akun selain pasien, silakan hubungi administrator
-                </p>
-              </div>
-            </div> */}
+            <div className="mt-4 text-center">
+              <p className="text-xs text-gray-500">
+                * Untuk akun selain pasien, silakan hubungi administrator
+              </p>
+            </div>
           </CardContent>
         </Card>
 
