@@ -10,6 +10,7 @@ import {
 import { ReferralForm } from "./ReferralForm"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { createReferral } from "@/app/lib/api"
 
 interface ReferralModalProps {
   open: boolean
@@ -22,30 +23,35 @@ export function ReferralModal({ open, onOpenChange, onSuccess }: ReferralModalPr
 
   const handleSubmit = async (values: any) => {
     try {
-      // Here you would typically send the data to your backend
-      console.log("Form submitted:", values)
-      
-      // Close the modal
+      // Attempt to create the referral
+      const result = await createReferral(values)
+      if (!result) {
+        throw new Error("Failed to create referral")
+      }
+
+      // Only close modal and refresh after successful creation
       onOpenChange(false)
       
       // Show success message
-      toast.success("Rujukan berhasil dibuat!")
+      toast.success("Rujukan berhasil dibuat!", {
+        duration: 3000
+      })
       
       // Call onSuccess callback if provided
       if (onSuccess) {
         onSuccess()
       }
       
-      // Force a refresh of the page data
-      router.refresh()
+      // Wait for toast to be visible before refreshing
+      await new Promise(resolve => setTimeout(resolve, 1000))
       
-      // Force a hard refresh after a short delay to ensure data is updated
-      setTimeout(() => {
-        window.location.reload()
-      }, 100)
+      // Refresh the data
+      router.refresh()
     } catch (error) {
       console.error("Error submitting referral:", error)
-      toast.error("Gagal membuat rujukan. Silakan coba lagi.")
+      toast.error("Gagal membuat rujukan. Silakan coba lagi.", {
+        duration: 3000
+      })
     }
   }
 

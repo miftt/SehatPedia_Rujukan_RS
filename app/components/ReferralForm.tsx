@@ -78,25 +78,50 @@ export function ReferralForm({ onSubmit }: ReferralFormProps) {
         return
       }
 
+      // Map UI urgency values to API values
+      const urgencyMap = {
+        "emergency": "high",
+        "planned": "low",
+        "consultation": "medium"
+      } as const
+
       const referralData = {
         patientName: formData.patientName,
         condition: formData.diagnosis,
         hospital: selectedHospital.name,
-        urgency: formData.referralType as "low" | "medium" | "high",
+        urgency: urgencyMap[formData.referralType as keyof typeof urgencyMap] || "medium",
+        // Include additional data that might be useful for the detail view
+        nik: formData.nik,
+        birthDate: formData.birthDate,
+        gender: formData.gender,
+        address: formData.address,
+        symptoms: formData.symptoms,
+        bloodPressure: formData.bloodPressure,
+        heartRate: formData.heartRate,
+        temperature: formData.temperature,
+        respiratoryRate: formData.respiratoryRate,
+        reason: formData.reason,
+        notes: formData.notes
       }
 
+      // First try to save to API
+      let savedReferral;
       if (onSubmit) {
         await onSubmit(referralData)
       } else {
-        await createReferral(referralData)
-        router.refresh()
+        savedReferral = await createReferral(referralData)
+        if (!savedReferral) {
+          throw new Error("Failed to create referral - no response from server")
+        }
       }
       
+      // Only show success and reset form after confirmed save
       toast.success("Rujukan berhasil dibuat!", {
-        description: `Pasien: ${formData.patientName}`
+        description: `Pasien: ${formData.patientName}`,
+        duration: 3000 // Show for 3 seconds
       })
 
-      // Reset form
+      // Reset form after successful save
       setFormData({
         patientName: "",
         nik: "",
@@ -114,10 +139,16 @@ export function ReferralForm({ onSubmit }: ReferralFormProps) {
         reason: "",
         notes: ""
       })
+
+      // Wait for toast to be visible before refreshing
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      router.refresh()
+
     } catch (error) {
       console.error("Error creating referral:", error)
       toast.error("Gagal membuat rujukan", {
-        description: "Silakan coba lagi nanti"
+        description: "Silakan coba lagi nanti",
+        duration: 3000
       })
     } finally {
       setIsLoading(false)
