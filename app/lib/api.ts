@@ -1,4 +1,4 @@
-import { Hospital, Referral, DashboardStats } from "@/types"
+import { Hospital, Referral, DashboardStats } from "@/app/types"
 
 const API_BASE_URL = "/api"
 
@@ -40,10 +40,22 @@ export const createReferral = async (referralData: Omit<Referral, "id" | "status
       },
       body: JSON.stringify(referralData),
     })
-    if (!response.ok) throw new Error("Failed to create referral")
-    return response.json()
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      console.error("Failed to create referral:", errorData)
+      throw new Error(errorData.error || "Failed to create referral")
+    }
+
+    const data = await response.json()
+    if (!data) {
+      throw new Error("No data received from server")
+    }
+
+    return data
   } catch (error) {
-    return handleApiError(error)
+    console.error("API Error:", error)
+    throw error
   }
 }
 

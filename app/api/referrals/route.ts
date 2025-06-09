@@ -40,12 +40,30 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    
+    // Create new referral with all fields
     const newReferral = {
       id: `REF${String(recentReferrals.length + 1).padStart(3, "0")}`,
-      ...body,
-      date: new Date().toISOString().split("T")[0],
+      patientName: body.patientName,
+      condition: body.condition,
+      hospital: body.hospital,
       status: "pending",
+      date: new Date().toISOString().split("T")[0],
+      urgency: body.urgency,
+      // Additional fields
+      nik: body.nik,
+      birthDate: body.birthDate,
+      gender: body.gender,
+      address: body.address,
+      symptoms: body.symptoms,
+      bloodPressure: body.bloodPressure,
+      heartRate: body.heartRate,
+      temperature: body.temperature,
+      respiratoryRate: body.respiratoryRate,
+      reason: body.reason,
+      notes: body.notes
     }
+
     recentReferrals.push(newReferral)
     return NextResponse.json(newReferral, { status: 201 })
   } catch (error) {
